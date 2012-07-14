@@ -37,6 +37,7 @@
 					return file_get_contents('/sys/class/gpio/gpio'.$pinNo.'/value');
 				} else {
 					echo 'Error! Wrong Direction for this pin!';
+					return FALSE;
 				}
 			}
 		}
@@ -46,8 +47,10 @@
 			if($this->isExported($pinNo)) {
 				if($this->currentDirection($pinNo) != "in") {
 					file_put_contents('/sys/class/gpio/gpio'.$pinNo.'/value', $value);
+					return TRUE;
 				} else {
 					echo 'Error! Wrong Direction for this pin! Meant to be out while it is ' . $this->currentDirection($pinNo);
+					return FALSE;
 				}
 			}
 		}
@@ -58,6 +61,10 @@
 				foreach ($this->exportedPins as $key => $value) {
 					if($value == $pinNo) unset($key);
 				}
+			}
+			else
+			{
+				return FALSE;
 			}
 		}
 
